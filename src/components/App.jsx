@@ -29,10 +29,11 @@ export const App = () => {
    //   if (searchWord !== '' || page !== 1) {
         setIsLoading(true);
         setError(null);
+        setShowMoreBtn(false);
         loadImagesPixabay(searchWord, page)
           .then(resp => {
-         //   console.log('use Effect resp', resp);
-            if (!resp.length) {
+            console.log('use Effect resp', resp);
+            if (resp.length === 0) {
               setIsEmpty(true);
               setIsLoading(false);
               setShowMoreBtn(false);
