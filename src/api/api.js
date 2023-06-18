@@ -11,7 +11,6 @@ axios.defaults.params = {
 
 export const loadImagesPixabay = async function(searchQuery, page) {
     const response = await axios.get(`?q=${searchQuery}&page=${page}`);
-  //  console.log('cls from API:',response);
     return response.data.hits;
 }
 

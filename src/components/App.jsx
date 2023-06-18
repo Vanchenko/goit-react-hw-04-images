@@ -23,16 +23,13 @@ export const App = () => {
 
 
   useEffect(() => {
-   // console.log('prevSW', searchWord, page)
     if (isFetch) {
       setIsFetch(false);
-   //   if (searchWord !== '' || page !== 1) {
         setIsLoading(true);
         setError(null);
         setShowMoreBtn(false);
         loadImagesPixabay(searchWord, page)
           .then(resp => {
-            console.log('use Effect resp', resp);
             if (resp.length === 0) {
               setIsEmpty(true);
               setIsLoading(false);
@@ -49,7 +46,6 @@ export const App = () => {
           }).finally(() => {
             setIsLoading(false);
           });
-     // }
     }
   }, [searchWord, images, showMoreBtn, page, error, isLoading, isEmpty, isFetch]);
 
@@ -108,4 +104,3 @@ return (
     );
 }
 
-//  <Modal bigImage={bigImage} onClose={this.onCloseModal}></Modal>;
