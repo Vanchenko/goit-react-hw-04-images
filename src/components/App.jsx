@@ -16,45 +16,42 @@ export const App = () => {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
   const [bigImage, setBigImage] = useState('');
   const [page, setPage] = useState(1);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
-  const [isFetch, setIsFetch] = useState(false)
+
 
 
   useEffect(() => {
-    if (isFetch) {
-      setIsFetch(false);
-        setIsLoading(true);
-        setError(null);
-        setShowMoreBtn(false);
-        loadImagesPixabay(searchWord, page)
-          .then(resp => {
-            if (resp.length === 0) {
-              setIsEmpty(true);
-              setIsLoading(false);
-              setShowMoreBtn(false);
-              return;
-            }
-            setImages(prevState => [...prevState, ...resp]);
-            if (resp.length >= PER_PAGE) {
-              setShowMoreBtn(true);
-            }
-          }).catch(error => {
-            console.log(error.message);
-            setError(error.message);
-          }).finally(() => {
+    if (searchWord !=='') {
+      setIsLoading(true);
+      setShowMoreBtn(false);
+      loadImagesPixabay(searchWord.split('/')[1], page)
+        .then(resp => {
+          if (resp.length === 0) {
+            setIsEmpty(true);
             setIsLoading(false);
-          });
+            setShowMoreBtn(false);
+            return;
+          }
+          setImages(prevState => [...prevState, ...resp]);
+          if (resp.length >= PER_PAGE) {
+            setShowMoreBtn(true);
+          }
+        })
+        .catch(error => {
+          console.log(error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
-  }, [searchWord, images, showMoreBtn, page, error, isLoading, isEmpty, isFetch]);
+  }, [searchWord, page]);
 
   const onSubmit = evt => {
     evt.preventDefault();
     const sw = evt.target.elements[1].value;
     if (sw !== '') {
-      setIsFetch(true);
-      setSearchWord(sw);
+      setSearchWord(`${Date.now()}/${sw}`);
       setPage(1);
       setImages([]);
       setShowModal(false);
@@ -66,7 +63,6 @@ export const App = () => {
 
   const onLoadMore = () => {
     setPage(prevPage => (prevPage + 1));
-    setIsFetch(true);
   };
   const onImageClick = evt => {
     setShowModal(true);
